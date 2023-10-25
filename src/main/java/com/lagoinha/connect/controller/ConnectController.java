@@ -1,7 +1,10 @@
 package com.lagoinha.connect.controller;
 
+import java.util.List;
+
 import com.lagoinha.connect.model.connect.Connect;
 import com.lagoinha.connect.service.ConnectService;
+import com.lagoinha.connect.util.StringHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,52 +23,52 @@ public class ConnectController {
 	ConnectService connectService;
 
 
-	@GetMapping("readCSV")
-	public String readCSV() {
-		if (connectService.readCsv()) {
-			return "Deu certo";
-		} else {
-			return "Deu errado";
-		}
-	}
-
-	@GetMapping("signup")
-	public String showSignUpForm(Connect connect) {
-		return "connect/add-connect";
-	}
-
 	@GetMapping("index")
 	public String showConnectList(Model model) {
 		model.addAttribute("connects", connectService.list());
 		return "connect/index";
 	}
 
+	@GetMapping("signup")
+	public String showSignUpForm(Connect connect, Model model) {
+		model.addAttribute("errors", null);
+		return "connect/add-connect";
+	}
+
 	@PostMapping("addconnect")
 	public String save(Connect connect, BindingResult result, Model model) {
-
-		if (result.hasErrors()) {
+		List<String> err = null;
+		try {
+			connectService.save(connect);
+			return "redirect:/connect/index";
+		} catch (Exception e) {
+			err = StringHelper.stringAsList(e.getMessage());
+			model.addAttribute("errors", err);
 			return "/connect/add-connect";
 		}
-
-		connectService.save(connect);
-		return "redirect:/connect/index";
+		
 	}
 
 	@GetMapping("edit/{id}")
 	public String showUpdateForm(@PathVariable("id") String id, Model model) {
 		Connect connect = connectService.findById(id);
 		model.addAttribute("connect", connect);
+		model.addAttribute("errors", null);
 		return "connect/update-connect";
 	}
 
 	@PostMapping("update/{id}")
 	public String edit(@PathVariable("id") String id, Connect connect, BindingResult result, Model model) {
-		if (result.hasErrors()) {
+		List<String> err = null;
+		try {
+			connectService.edit(connect);
+			return "redirect:/connect/index";
+		} catch (Exception e) {
 			connect.setId(connect.getId());
+			err = StringHelper.stringAsList(e.getMessage());
+			model.addAttribute("errors", err);
 			return "connect/update-connect";
 		}
-		connectService.edit(connect);
-		return "redirect:/connect/index";
 	}
 
 	@GetMapping("delete/{id}")

@@ -5,11 +5,14 @@ import java.io.FileReader;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.lagoinha.connect.model.connect.Connect;
+import com.lagoinha.connect.util.ServiceException;
+import com.lagoinha.connect.util.StringHelper;
 import com.mongodb.client.result.DeleteResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,47 @@ public class ConnectService {
 	
 	private final static String COLLECTION = "connect";
 	
-	public Connect save(Connect user) {
-		return mongoTemplate.save(user, COLLECTION);
+	public Connect save(Connect connect) {
+		try {
+			if(validarConnect(connect)) {
+				return mongoTemplate.save(connect, COLLECTION);
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+		
+	}
+	
+	private Boolean validarConnect(Connect connect) {
+		Boolean retorno = true;
+		List<String> mensagens = new ArrayList<>();
+		if(!StringHelper.validarString(connect.getName())) {
+			mensagens.add("O campo nome é obrigatório.");
+		}
+		if(!StringHelper.validarString(connect.getPhone())) {
+			mensagens.add("O campo telefone é obrigatório.");
+		}
+		if(!StringHelper.validarString(connect.getResponsible())) {
+			mensagens.add("O campo responsável é obrigatório.");
+		}
+		if(!StringHelper.validarTelefone(connect.getPhone()) && StringHelper.validarString(connect.getPhone())){
+			mensagens.add("O campo telefone está no formato errado.");
+		}
+		LocalDate dataNascimento = StringHelper.converterParaData(connect.getBirthDate());
+		if(dataNascimento != null){
+			if(!StringHelper.validarIdade(dataNascimento)) {
+				mensagens.add("Não é permitido o cadastro de connect com idade inferior a 8 anos e superior a 11 anos.");
+			}
+		}else {
+			if(StringHelper.validarString(connect.getBirthDate())) {
+				mensagens.add("O campo data de nascimento está no formato errado.");
+			}
+		}
+		if(!mensagens.isEmpty()) {
+			throw new ServiceException(StringHelper.listToString(mensagens));
+		}
+		return retorno;
 	}
 	
 	public List<Connect> list(){
@@ -43,13 +85,19 @@ public class ConnectService {
 		return mongoTemplate.remove(query, Connect.class, COLLECTION);
 	}
 	
-	public Connect edit(Connect usuario) {
-		Query query  = new Query(Criteria.where("id").is(usuario.getId()));
-		Connect usuarioAuxiliar = mongoTemplate.findOne(query, Connect.class);
-		if(usuarioAuxiliar != null) {
-			return mongoTemplate.save(usuario, COLLECTION);
+	public Connect edit(Connect connect) {
+		try {
+			if(validarConnect(connect)) {
+				Query query  = new Query(Criteria.where("id").is(connect.getId()));
+				Connect usuarioAuxiliar = mongoTemplate.findOne(query, Connect.class);
+				if(usuarioAuxiliar != null) {
+					return mongoTemplate.save(connect, COLLECTION);
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 	
 	public Boolean readCsv() {
