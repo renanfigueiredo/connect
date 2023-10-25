@@ -82,27 +82,27 @@
 	<form action="#" th:action="@{/worship/add-connect-visitor-worship}" th:object="${connectVisitor}" method="post">
 		<div class="form-group">
 		   	<label for="name">Nome</label>
-		   	<input class="form-control" type="text" th:field="*{name}" id="name" placeholder="Nome do Connect" required>
+		   	<input class="form-control" type="text" th:field="*{name}" id="name" placeholder="Nome do Connect">
 		</div>
 	    <br>
 	    <div class="form-group">
 	    	<label for="birthDate">Data de Nascimento</label>
-	    	<input class="form-control" type="text" th:field="*{birthDate}" id="birthDate" placeholder="dd/MM/yyyy" required>
+	    	<input class="form-control" type="text" th:field="*{birthDate}" id="birthDate" placeholder="dd/MM/yyyy">
 	    </div>
 	    <br>
 	    <div class="form-group">
 	    	<label for="responsible">Responsável</label>
-	    	<input class="form-control" type="text" th:field="*{responsible}" id="responsible" placeholder="Nome do Responsável" required>
+	    	<input class="form-control" type="text" th:field="*{responsible}" id="responsible" placeholder="Nome do Responsável">
 	    </div>
 	    <br>
 	    <div class="form-group">
 	    	<label for="email">Telefone</label>
-	    	<input class="form-control" type="tel" th:field="*{phone}" id="phone" placeholder="(99) 99999-9999" required>
+	    	<input class="form-control" type="tel" th:field="*{phone}" id="phone" placeholder="(99) 99999-9999">
 	    </div>
 	    <br>		
 		<div class="form-group">
 			<label for="date">Número da Pulseira</label>
-			<input class="form-control" type="number" th:field="*{braceletNumber}" id="number" placeholder="0000" required>
+			<input class="form-control" type="number" th:field="*{braceletNumber}" id="number" placeholder="0000">
 		</div>
 		<input type="hidden" th:value="${worship.id}" name="idWorship" />
 		<br>

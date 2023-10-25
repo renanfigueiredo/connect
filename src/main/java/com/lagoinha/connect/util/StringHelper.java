@@ -3,6 +3,7 @@ package com.lagoinha.connect.util;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,14 @@ public class StringHelper {
 		return true;
 	}
 	
+	public static Boolean validateBracelet(Integer number) {
+		try {
+			return validarString(number.toString());
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public static Boolean validarString(String string) {
 		Boolean retorno = true;
 		try {
@@ -40,7 +49,6 @@ public class StringHelper {
 			}
 			return retorno;
 		} catch (Exception e) {
-			e.printStackTrace();
 			retorno = false;
 			return retorno;
 		}
@@ -55,7 +63,12 @@ public class StringHelper {
 	
 	public static List<String> stringAsList(String text) {
 		String[] texto = text.split(";");
-		return Arrays.asList(texto);
+		List<String> tempList = Arrays.asList(texto);
+		List<String> finalList = new ArrayList<>();
+		for(String s : tempList) {
+			finalList.add(s);
+		}
+		return finalList;
 	}
 	
 	public static Boolean validarStringIgual(String s) {

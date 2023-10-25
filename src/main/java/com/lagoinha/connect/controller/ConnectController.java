@@ -44,7 +44,7 @@ public class ConnectController {
 		} catch (Exception e) {
 			err = StringHelper.stringAsList(e.getMessage());
 			model.addAttribute("errors", err);
-			return "/connect/add-connect";
+			return "connect/add-connect";
 		}
 		
 	}

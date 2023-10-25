@@ -41,18 +41,22 @@ public class ConnectService {
 		
 	}
 	
-	private Boolean validarConnect(Connect connect) {
+	public Boolean validarConnect(Connect connect) {
 		Boolean retorno = true;
 		List<String> mensagens = new ArrayList<>();
 		if(!StringHelper.validarString(connect.getName())) {
 			mensagens.add("O campo nome é obrigatório.");
 		}
-		if(!StringHelper.validarString(connect.getPhone())) {
-			mensagens.add("O campo telefone é obrigatório.");
+		if(!StringHelper.validarString(connect.getBirthDate())) {
+			mensagens.add("O campo data de nascimento é obrigatório.");
 		}
 		if(!StringHelper.validarString(connect.getResponsible())) {
 			mensagens.add("O campo responsável é obrigatório.");
 		}
+		if(!StringHelper.validarString(connect.getPhone())) {
+			mensagens.add("O campo telefone é obrigatório.");
+		}
+		
 		if(!StringHelper.validarTelefone(connect.getPhone()) && StringHelper.validarString(connect.getPhone())){
 			mensagens.add("O campo telefone está no formato errado.");
 		}

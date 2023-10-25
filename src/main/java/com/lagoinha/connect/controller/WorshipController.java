@@ -12,6 +12,7 @@ import com.lagoinha.connect.service.ConnectService;
 import com.lagoinha.connect.service.WorshipService;
 import com.lagoinha.connect.util.StringHelper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,7 +114,19 @@ public class WorshipController {
 			connect.setPhone(connectVisitor.getPhone());
 			connect.setResponsible(connectVisitor.getResponsible());
 			
+			if(connectService.validarConnect(connect)) {
+				if(!StringHelper.validateBracelet(connectVisitor.getBraceletNumber())){
+					Worship worship = worshipService.findById(connectVisitor.getIdWorship());
+				    model.addAttribute("worship", worship);
+				    model.addAttribute("connectVisitor", connectVisitor);
+					err = StringHelper.stringAsList("O número da pulseira é obrigatório.");
+					model.addAttribute("errors", err);
+					return "worship/add-connect-visitor";
+				}
+			}
+			
 			Connect connectSaved = connectService.save(connect);
+			
 			
 			Worship worship = worshipService.findById(connectVisitor.getIdWorship());
 			worshipService.addToWorship(worship, connectSaved, connectVisitor.getBraceletNumber());
@@ -122,8 +135,11 @@ public class WorshipController {
 		} catch (Exception e) {
 			Worship worship = worshipService.findById(connectVisitor.getIdWorship());
 		    model.addAttribute("worship", worship);
-		    model.addAttribute("connectVisitor", new ConnectVisitor());
+		    model.addAttribute("connectVisitor", connectVisitor);
 			err = StringHelper.stringAsList(e.getMessage());
+			if(!StringHelper.validateBracelet(connectVisitor.getBraceletNumber())){
+				err.add("O número da pulseira é obrigatório.");
+			}
 			model.addAttribute("errors", err);
 			return "worship/add-connect-visitor";
 		}

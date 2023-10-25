@@ -76,26 +76,22 @@
 			<form action="#" th:action="@{/connect/addconnect}" th:object="${connect}" method="post">
 				<div class="form-group">
 			    	<label for="name">Nome</label>
-			    	<input class="form-control" type="text" th:field="*{name}" id="name" placeholder="Connect Name" required>
-			    	<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+			    	<input class="form-control" type="text" th:field="*{name}" id="name" placeholder="Connect Name">
 			    </div>
 			    <br>
 			    <div class="form-group">
 			    	<label for="birthDate">Data de Nascimento</label>
-			    	<input class="form-control" type="text" th:field="*{birthDate}" id="birthDate" placeholder="dd/MM/yyyy" required>
-			    	<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+			    	<input class="form-control" type="text" th:field="*{birthDate}" id="birthDate" placeholder="dd/MM/yyyy">
 			    </div>
 			    <br>
 			    <div class="form-group">
 			    	<label for="responsible">Responsável</label>
-			    	<input class="form-control" type="text" th:field="*{responsible}" id="responsible" placeholder="Responsible Name" required>
-			    	<span th:if="${#fields.hasErrors('responsible')}" th:errors="*{responsible}"></span>
+			    	<input class="form-control" type="text" th:field="*{responsible}" id="responsible" placeholder="Responsible Name">
 			    </div>
 			    <br>
 			    <div class="form-group">
 			    	<label for="email">Telefone</label>
-			    	<input class="form-control" type="tel" th:field="*{phone}" id="phone" placeholder="(99) 99999-9999" required>
-			    	<span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+			    	<input class="form-control" type="tel" th:field="*{phone}" id="phone" placeholder="(99) 99999-9999">
 			    </div>
 			    <br>	
 			    <div class="form-group">	
